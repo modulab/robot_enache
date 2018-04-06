@@ -22,7 +22,7 @@ void velCallback( const lino_msgs::Velocities& vel) {
 
     g_vel_x = vel.linear_x;
     g_vel_y = vel.linear_y;
-
+    g_imu_z = vel.angular_z;
     g_vel_dt = (current_time - g_last_vel_time).toSec();
     g_last_vel_time = current_time;
 }
@@ -37,7 +37,7 @@ void IMUCallback( const sensor_msgs::Imu& imu){
     }
     else
     {
-        g_imu_z = imu.angular_velocity.z;
+        //g_imu_z = imu.angular_velocity.z;
     }
     g_imu_dt = (current_time - g_last_imu_time).toSec();
     g_last_imu_time = current_time;
@@ -72,7 +72,7 @@ int main(int argc, char** argv){
         double angular_velocity = g_imu_z;
 
         //calculate angular displacement  θ = ω * t
-        double delta_theta = angular_velocity * g_imu_dt; //radians
+        double delta_theta = angular_velocity * g_vel_dt; //radians
         double delta_x = (linear_velocity_x * cos(theta) - linear_velocity_y * sin(theta)) * g_vel_dt; //m
         double delta_y = (linear_velocity_x * sin(theta) + linear_velocity_y * cos(theta)) * g_vel_dt; //m
 
